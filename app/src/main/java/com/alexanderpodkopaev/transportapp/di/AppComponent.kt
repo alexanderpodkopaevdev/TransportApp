@@ -1,16 +1,35 @@
 package com.alexanderpodkopaev.transportapp.di
 
-import com.alexanderpodkopaev.transportapp.screens.main.MainActivity
-import com.alexanderpodkopaev.transportapp.screens.main.MainFragment
+import android.app.Application
+import com.alexanderpodkopaev.presentation.di.PresentationComponent
+import com.alexanderpodkopaev.presentation.di.ScreenBindingModule
+import com.alexanderpodkopaev.transportapp.TransportApp
+import com.alexanderpodkopaev.transportapp.di.modules.ActivityBindingModule
+import com.alexanderpodkopaev.utilities.di.UtilsComponent
+import dagger.BindsInstance
 import dagger.Component
-import dagger.Module
+import dagger.android.AndroidInjectionModule
+import dagger.android.AndroidInjector
 
-@Component(modules = [ApplicationModule::class])
-interface AppComponent {
+@Component(
+    modules = [
+        AndroidInjectionModule::class,
+        ActivityBindingModule::class,
+        ScreenBindingModule::class
+    ],
+    dependencies = [PresentationComponent::class, UtilsComponent::class]
+)
+@AppScope
+interface AppComponent : AndroidInjector<TransportApp> {
 
-    //Activities
-    fun inject(activity: MainActivity)
+    @Component.Builder
+    interface Builder {
+        @BindsInstance
+        fun application(application: Application): AppComponent.Builder
 
-    //Fragments
-    fun inject(fragment: MainFragment)
+        fun presentationComponent(presentationComponent: PresentationComponent): AppComponent.Builder
+        fun utilsComponent(utilsComponent: UtilsComponent): AppComponent.Builder
+
+        fun build(): AppComponent
+    }
 }

@@ -5,7 +5,7 @@ import dagger.Component
 
 @Component(modules = [UseCasesModules::class])
 @DomainScope
-class DomainComponent {
+interface DomainComponent {
 
     @Component.Builder
     interface Builder {
